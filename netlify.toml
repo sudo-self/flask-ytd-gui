@@ -1,7 +1,8 @@
 [build]
-  command = "pip install -r requirements.txt && python app.py"
+  command = "pip install -r requirements.txt"
   publish = "."
 
 [context.production.environment]
   PORT = "5000"
+
 
