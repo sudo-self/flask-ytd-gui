@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>snake.py</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1.snaked-vidz {
+            cursor: pointer;
+            font-size: 24px;
+            display: block;
+            color: green;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+      
+
+        .closeButton {
+            margin-top: 10px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="snaked-vidz" id="openButton">
+       
+    </h1>
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ url_for('downloaded_file', filename=file) }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div id="iframeContainer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const openButton = document.getElementById('openButton');
+            const iframeContainer = document.getElementById('iframeContainer');
+
+            openButton.addEventListener('click', function() {
+                toggleIframe();
+            });
+
+            function toggleIframe() {
+                if (iframeContainer.style.display === 'none') {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'http://127.0.0.1:5000/downloads/';
+                    iframe.style.width = '100%';
+                    iframe.style.height = '400px';
+                    iframe.style.border = '1px solid #ccc';
+                    iframeContainer.innerHTML = '';
+                    iframeContainer.appendChild(iframe);
+                    openButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64"><path fill="#199050" d="M43.573 39.05c0 4.314-3.533 7.812-7.891 7.812c-4.356 0-7.89-3.498-7.89-7.812V10.92c0-4.314 3.533-7.813 7.89-7.813c4.357 0 7.891 3.499 7.891 7.813z"/><ellipse cx="33.835" cy="16.352" rx="17.844" ry="11.774"/></svg> Close';
+                } else {
+                    iframeContainer.innerHTML = '';
+                    openButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64"><path fill="#199050" d="M43.573 39.05c0 4.314-3.533 7.812-7.891 7.812c-4.356 0-7.89-3.498-7.89-7.812V10.92c0-4.314 3.533-7.813 7.89-7.813c4.357 0 7.891 3.499 7.891 7.813z"/><ellipse cx="33.835" cy="16.352" rx="17.844" ry="11.774"/></svg>';
+                }
+                iframeContainer.style.display = iframeContainer.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+    </script>
+</body>
+</html>
