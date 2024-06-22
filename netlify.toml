@@ -3,4 +3,4 @@
   publish = "."
 
 [context.production.environment]
-  PORT = 5000
+  PORT = "5000"
