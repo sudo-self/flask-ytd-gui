@@ -4,8 +4,12 @@ import os
 import threading
 import platform
 import pyperclip
+import logging
 
 app = Flask(__name__)
+
+# Configure logging
+logging.basicConfig(filename='app.log', level=logging.INFO)
 
 DOWNLOAD_FOLDER = 'downloads'
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
@@ -19,7 +23,7 @@ def download_video():
     url = request.form.get('url')
     if url:
         threading.Thread(target=download_video_thread, args=(url,), daemon=True).start()
-        return jsonify({'message': '' + url})
+        return jsonify({'message': f'Started download for: {url}'})
     else:
         return jsonify({'error': 'No video URL input'}), 400
 
@@ -36,8 +40,7 @@ def download_video_thread(url):
 
 def update_terminal(out, err):
     terminal_output = out + err
-    with open('terminal.log', 'a') as f:
-        f.write(terminal_output + '\n')
+    logging.info(terminal_output)
 
 @app.route('/downloads')
 def downloads():
@@ -82,3 +85,4 @@ def stop_session():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
