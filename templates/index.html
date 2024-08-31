@@ -37,23 +37,24 @@
         }
 
         input[type="text"] {
-            width: calc(100% - 220px);
+            width: 100%;
             padding: 10px;
-            margin-right: 10px;
+            margin-bottom: 20px;
             font-size: 16px;
             border: 2px solid #002400;
             border-radius: 8px;
             outline: none;
         }
 
-        .button-row {
-            display: inline-flex;
-            gap: 10px;
-            margin-top: 10px;
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            margin-bottom: 10px;
         }
 
         button {
-            padding: 10px 20px;
+            padding: 15px;
             font-size: 16px;
             background-color: #ccc;
             color: #002400;
@@ -84,20 +85,20 @@
             border: none;
             border-radius: 5px;
         }
-        
+
         p.placeholder {
-                   color: #002400;
-                   font-style: italic;
-               }
+            color: #002400;
+            font-style: italic;
+        }
 
-               a {
-                   text-decoration: none;
-                   color: #333;
-               }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
 
-               a:hover {
-                   text-decoration: underline;
-               }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -107,13 +108,14 @@
         
         <form id="downloadForm" action="{{ url_for('download_video') }}" method="POST">
             <input id="urlInput" type="text" name="url" placeholder="Enter URL https://">
-                <div class="button-row">
-                    <button type="button" id="pasteButton">Paste</button>
-                    <button type="button" id="clearButton">Clear</button>
-                    <button type="button" id="openButton">Open</button>
-                    <button type="button" id="stopButton">Stop</button>
-                    <button type="submit">Download</button>
-                </div>
+            <div class="button-grid">
+                <button type="button" id="pasteButton">Paste</button>
+                <button type="button" id="clearButton">Clear</button>
+                <button type="button" id="openButton">Open</button>
+                <button type="button" id="stopButton">Stop</button>
+                <button type="submit" id="downloadButton">Download</button>
+                <button type="button" id="quitButton">Quit</button>
+            </div>
         </form>
         
         <div id="iframeContainer"></div>
@@ -132,6 +134,7 @@
         const clearButton = document.getElementById('clearButton');
         const iframeContainer = document.getElementById('iframeContainer');
         const stopButton = document.getElementById('stopButton');
+        const quitButton = document.getElementById('quitButton');
         
         pasteButton.addEventListener('click', () => {
             fetch('/paste', { method: 'POST' })
@@ -156,7 +159,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                updateTerminalOutput('download in progress...');
+                updateTerminalOutput('Download in progress...');
                 if (data.error) {
                     updateTerminalOutput(data.error);
                 } else {
@@ -184,6 +187,16 @@
                 updateTerminalOutput(data);
             })
             .catch(error => console.error('Error stopping session:', error));
+        });
+
+        quitButton.addEventListener('click', () => {
+            fetch('/quit', { method: 'POST' })
+            .then(response => response.text())
+            .then(data => {
+                updateTerminalOutput('Quitting application...');
+                window.close();  // This will attempt to close the browser window
+            })
+            .catch(error => console.error('Error quitting application:', error));
         });
         
         function updateTerminalOutput(message) {
