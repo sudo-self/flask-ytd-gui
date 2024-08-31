@@ -40,10 +40,24 @@
             text-decoration: underline;
         }
 
-      
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-        .closeButton {
-            margin-top: 10px;
+        .split-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .quit-button {
             background-color: #ff0000;
             color: #fff;
             border: none;
@@ -54,7 +68,7 @@
 </head>
 <body>
     <h1 class="snaked-vidz" id="openButton">
-       
+        <!-- SVG or Text for the button will go here -->
     </h1>
     <ul>
         {% for file in files %}
@@ -62,16 +76,16 @@
         {% endfor %}
     </ul>
 
+    <div class="button-container">
+        <button class="split-button" onclick="toggleIframe()">Download</button>
+        <button class="quit-button" onclick="window.close()">Quit</button>
+    </div>
+
     <div id="iframeContainer"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const openButton = document.getElementById('openButton');
             const iframeContainer = document.getElementById('iframeContainer');
-
-            openButton.addEventListener('click', function() {
-                toggleIframe();
-            });
 
             function toggleIframe() {
                 if (iframeContainer.style.display === 'none') {
@@ -82,13 +96,14 @@
                     iframe.style.border = '1px solid #ccc';
                     iframeContainer.innerHTML = '';
                     iframeContainer.appendChild(iframe);
-                    openButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64"><path fill="#199050" d="M43.573 39.05c0 4.314-3.533 7.812-7.891 7.812c-4.356 0-7.89-3.498-7.89-7.812V10.92c0-4.314 3.533-7.813 7.89-7.813c4.357 0 7.891 3.499 7.891 7.813z"/><ellipse cx="33.835" cy="16.352" rx="17.844" ry="11.774"/></svg> Close';
                 } else {
                     iframeContainer.innerHTML = '';
-                    openButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64"><path fill="#199050" d="M43.573 39.05c0 4.314-3.533 7.812-7.891 7.812c-4.356 0-7.89-3.498-7.89-7.812V10.92c0-4.314 3.533-7.813 7.89-7.813c4.357 0 7.891 3.499 7.891 7.813z"/><ellipse cx="33.835" cy="16.352" rx="17.844" ry="11.774"/></svg>';
                 }
                 iframeContainer.style.display = iframeContainer.style.display === 'none' ? 'block' : 'none';
             }
+
+            // Initialize iframeContainer display
+            iframeContainer.style.display = 'none';
         });
     </script>
 </body>
